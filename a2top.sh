@@ -1,5 +1,5 @@
 #!/bin/bash
-version="a2top version 0.1 - by Guy 'Shoko' Egozy and Ilya 'Yalda' Sher"
+version="a2top version 0.1 - by Guy 'Shoko' Egozy and Ilya Sher"
 
 ## Defaults
 # url for status page
