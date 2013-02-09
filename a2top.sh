@@ -1,7 +1,7 @@
 #!/bin/bash
 version="a2top version 0.1 - by GE.Shoko"
 
-### Defaults
+## Defaults
 # url for status page
 status_url='http://127.0.0.1/server-status'
 # screen update interval - hotkey s
@@ -59,6 +59,14 @@ Hotkeys:
   h|H|?  Show this help
   q|Q    Quit
 
+Command line options:
+  -h	show help
+  -v	show version
+  -u	apache server-status url, detault: "http://127.0.0.1/server-status"
+  -c	configuration file, default: "~/.a2toprc"
+  -t	temp directory, default: "/dev/shm/a2top/{pid}"
+  -l	strace options, default: "-t -e trace=network"
+
 Scoreboard Key:
   "_" Waiting for Connection, "S" Starting up, "R" Reading Request,
   "W" Sending Reply, "K" Keepalive (read), "D" DNS Lookup,
@@ -86,7 +94,13 @@ TODO:
 hit q to continue'
 
 cmd_help="Usage: $0 [-hv] [-u status_url] [-c conifguration_file] [-t tmp_dir] [-l strace_options]
-   Use ?|h while running to get online help"
+  -h	show help
+  -v	show version
+  -u	apache server-status url, detault: http://127.0.0.1/server-status
+  -c	configuration file, default: ~/.a2toprc
+  -t	temp directory, default: /dev/shm/a2top/{pid}
+  -l	strace options, default: -t -e trace=network
+Use ?|h while running to get online help"
 
 txtund=$(tput sgr 0 1)	# Underline
 txtbld=$(tput bold)	# Bold
@@ -344,13 +358,16 @@ hlight='$hlight'" > $conf_file
 }
 
 exception_exit(){
-	echo "Incorrect output from status page, check the following:
-   * Apache is active
-   * Status page is available at '$status_url' (use -u to change the default)
-   * Lynx is installed
-   * Apache mod_status is cofigured with 'ExtendedStatus On'
-   * Finally check from command line that this works: 'lynx -dump -width=400 \"$status_url\"'"
-	terminate
+	terminate noexit
+	echo "
+ERROR:
+   Incorrect output from status page, check the following:
+    * Apache is active
+    * Status page is available at '$status_url' (use -u to change the default)
+    * Lynx is installed
+    * Apache mod_status is cofigured with 'ExtendedStatus On'
+    * Finally check from command line that this works: 'lynx -dump -width=400 \"$status_url\"'"
+	exit 2
 }
 
 term_dis(){
@@ -379,7 +396,7 @@ display(){
 		dis_pre="`(($uptime_dis)) && cat $tmp/uptime
 		cat $tmp/top
 		(($info_dis)) && cat $tmp/info
-		(($sb_dis)) && cat $tmp/sb | sed \"\\\$d\" | sed \"\\\${s#\\\$# \$clrr($((\`cat $tmp/tbl | egrep -v '^ $' | wc -l\`-1)) rows) #}\"
+		(($sb_dis)) && cat $tmp/sb | sed \"\\\$d\" | sed \"\\\${s#\\\$# \$clrr($((\`cat $tmp/tbl | egrep -v '^ *$|Srv  PID' | wc -l\`-1)) rows) #}\"
 		echo
 		cat $tmp/tbl`"
 		#dis="`echo \"$dis_pre\" | sed \"s#\\\$# #; s#^#$(tput el)#;\"`"
@@ -426,6 +443,7 @@ terminate(){
 	exec 2>&3; exec 3>&-
 	#tput cnorm
 	tput rmcup
+	[ "$1" = "noexit" ] && return
 	exit
 }
 
@@ -452,8 +470,8 @@ if [ -f "$conf_file" ]; then
 	source $conf_file
 	echo "Loaded settings from configuration file $conf_file"
 else
-	echo "Conifguration file $conf_file not found, hit any key to continue"
-	read -s -n 1
+	echo "Conifguration file $conf_file not found, using default values"
+	#read -s -n 1
 fi
 
 while getopts "vhu:c:t:l:" OPTION; do
