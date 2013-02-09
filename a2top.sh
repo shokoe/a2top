@@ -466,14 +466,6 @@ case $ina_dis in
 	1)	regex_string_ina=" _ | \. "; vregex_ina=1;;
 esac
 
-if [ -f "$conf_file" ]; then
-	source $conf_file
-	echo "Loaded settings from configuration file $conf_file"
-else
-	echo "Conifguration file $conf_file not found, using default values"
-	#read -s -n 1
-fi
-
 while getopts "vhu:c:t:l:" OPTION; do
 	case $OPTION in
 		h)	echo -e "$version\n$cmd_help"; exit;;
@@ -484,6 +476,14 @@ while getopts "vhu:c:t:l:" OPTION; do
 		l)	trace_opts="${OPTARG}";
 	esac
 done
+
+if [ -f "$conf_file" ]; then
+	source $conf_file
+	echo "Loaded settings from configuration file $conf_file"
+else
+	echo "Conifguration file $conf_file not found, using default values"
+	#read -s -n 1
+fi
 
 if [ ! -d $tmp ]; then
 	echo "Creating temporary directory $tmp"
