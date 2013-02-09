@@ -1,0 +1,84 @@
+.TH A2TOP 1
+.SH NAME
+a2top \- Top like console frontend for apache's web server mod_status
+.SH SYNOPSIS
+.B a2top
+.BI -v
+.br
+.B a2top
+.BI -h
+.br
+.B a2top
+[\fB-u \fIURL\fR]
+[\fB-c \fICONFIG_FILE\fR]
+[\fB-t \fITMP_DIR\fR]
+[\fB-l \fISTRACE_OPTS\fR]
+.SH DESCRIPTION
+.I a2top
+displays the information about current apache requests and status.
+Analogous to top, this is done periodically.
+
+.SH OPTIONS
+.PD 0
+.TP 20
+.BI -v
+Display version information and exit
+.TP
+.BI -h
+Display help and exit
+.TP
+.BI -u " URL"
+URL of the Apache server status page. Default: \fBhttp://127.0.0.1/server-status\fR
+.TP
+.BI -c " CONFIG_FILE"
+Specify configuration file to use. Default: \fB~/.a2toprc\fR
+.TP
+.BI -t " TMP_DIR"
+Specify directory to use for temporary files. The files are stored under \fITMP_DIR\fR/a2top/\fIPID\fR directory. Default: \fB/dev/shm\fR.
+.TP
+.BI -l " STRACE_OPTS"
+Specify trace options to use when running \fBstrace\fR. Default: \fB-t -e trace=network\fR
+
+.PD
+
+.SH HOTKEYS
+
+  \fBp\fR|\fBP\fR    Pause refresh
+  \fBd\fR      Tcpdump on all sockets by pid
+         * Experimentale
+  \fBs\fR|\fBS\fR    Change refresh interval
+  \fBc\fR|\fBC\fR    Cycle through scoreboard disply modes
+  \fBA\fR      Prompts for {cmd} and execute
+         "/etc/init.d/apache2 {cmd}"
+  \fBo\fR|\fBO\fR    Toggle info display
+  \fBt\fR      Sort by column
+         Gets only full column names
+         Knows which columns are numeric
+         Sort is reversed for numeric columns
+  \fBT\fR      Cancel column sort
+  \fBy\fR      Reverse column sort
+  \fBr\fR      Regex grep on query table, uses egrep,
+         regex is in double quotes
+  \fBv\fR      Regex exclude grep on query table, usess
+         egrep -v, regex is in double quotes
+  \fBR\fR      Cancel regex grep on query table
+  \fBg\fR      Highlight regex (sed address)
+         Does not work with the grep options
+  \fBi\fR      Filter inactive queries (state waiting
+         and open - _ and .)
+  \fBl\fR      Strace - strcae to file and "less +F" on it
+         To activate scroll - ^C
+         To resume tail - F
+         To exit back to a2top - ^C and q
+         * Does not work with MPM worke (no thread id)
+  \fBk\fR|\fBK\fR    Kill process (use with care)
+  \fBW\fR      Save configuration (default ~/.a2toprc)
+  \fBh\fR|\fBH\fR|\fB?\fR  Show this help
+  \fBq\fR|\fBQ\fR    Quit
+
+
+
+.SH AUTHOR
+Guy Egozy <shokoe@gmail.com>
+.PP
+This manual page was written by Ilya Sher <ilya.sher@coding-knight.com>
