@@ -1,4 +1,5 @@
 #!/bin/bash
+# Requirments: apt-get install lynx bc
 version="a2top version 0.1 - by Guy 'Shoko' Egozy and Ilya Sher"
 
 ## Defaults
