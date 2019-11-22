@@ -4,7 +4,7 @@
 # Requirments: apt-get install lynx bc
 version="a2top version 0.1 - by Guy 'Shoko' Egozy and Ilya Sher"
 
-# Copyright (c) 2008 TehcDrift Ltd.
+# Copyright (c) 2012 TehcDrift Ltd.
 # Permission is hereby granted, free of charge, to any person obtaining a copy
 # of this software and associated documentation files (the "Software"), to deal
 # in the Software without restriction, including without limitation the rights
